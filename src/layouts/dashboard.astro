@@ -1,0 +1,17 @@
+---
+import "../styles/global.css";
+import { AppLayout } from "@/components/app-layout";
+import MainLayout from "@/layouts/main.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<MainLayout title={title}>
+  <AppLayout client:load>
+    <slot />
+  </AppLayout>
+</MainLayout>

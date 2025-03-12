@@ -1,0 +1,34 @@
+---
+import { app } from "@/firebase/server";
+import { getAuth } from "firebase-admin/auth";
+import Layout from "@/layouts/main.astro";
+import { SignUpForm } from "@/components/signup";
+import { Logo } from "@/components/logo";
+
+/* Check if the user is authenticated */
+const auth = getAuth(app);
+if (Astro.cookies.has("__session")) {
+  const sessionCookie = Astro.cookies.get("__session")!.value;
+  const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+  if (decodedCookie) {
+    return Astro.redirect("/");
+  }
+}
+---
+
+<Layout title="Brainy | Sign in">
+  <div
+    class="min-h-screen flex flex-col items-center justify-center gap-4 w-full pb-16"
+  >
+    <div transition:name="auth-logo">
+      <Logo />
+    </div>
+    <div
+      transition:name="auth-form"
+      transition:animate="slide"
+      class="w-full flex items-center justify-center"
+    >
+      <SignUpForm client:load />
+    </div>
+  </div>
+</Layout>
